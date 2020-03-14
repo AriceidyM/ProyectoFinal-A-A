@@ -1,0 +1,117 @@
+﻿@page "/Usuario"
+
+<h3>RUsuarios</h3>
+
+<EditForm Model="Usuarios" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="IdInput">ArticuloId</label>
+        <InputNumber Id="IdInput" @bind-Value="Usuarios.UsuarioId" class="form-group"></InputNumber>
+        <button type="button" class="btn btn-outline-primary mt-2" @onclick="Buscar">Buscar</button>
+    </div>
+
+    <div class="form-group">
+        <label for="FechaIngresoInput">FechaIngreso</label>
+        <InputDate Id="FechaInput" @bind-Value="Usuarios.FechaIngreso" class="form-control"></InputDate>
+    </div>
+
+    <div class="form-group">
+        <label for="NombresInput">Nombres</label>
+        <InputText Id="DescripcionInput" @bind-Value="Usuarios.Nombres" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="EmailInput">Email</label>
+        <InputText Id="DescripcionInput" @bind-Value="Usuarios.Email" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="NivelUsuarioInput">NivelUsuario</label>
+        <InputText Id="DescripcionInput" @bind-Value="Usuarios.NivelUsuario" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="UsuarioInput">Usuario</label>
+        <InputText Id="DescripcionInput" @bind-Value="Usuarios.Usuario" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="ClaveInput">Clave</label>
+        <InputText Id="DescripcionInput" @bind-Value="Usuarios.Clave" class="form-control"></InputText>
+    </div>
+
+    <div>
+        <button class="btn btn-outline-secondary" type="button" @onclick="Limpiar">Limpiar</button>
+        <button class="btn btn-outline-success" type="submit">Guardar</button>
+        <button class="btn btn-outline-danger" type="button" @onclick="Eliminar">Eliminar</button>
+    </div>
+
+    <h5>@mensaje</h5>
+
+</EditForm>
+
+@code {
+
+    public Usuarios Usuarios = new Usuarios();
+    public string mensaje = "";
+
+    public void Guardar()
+    {
+        UsuariosController controller = new UsuariosController();
+
+        if (controller.Guardar(Usuarios))
+        {
+            this.Usuarios = new Usuarios();
+            mensaje = "Usuario Guardado";
+        }
+        else
+        {
+            this.Usuarios = new Usuarios();
+            mensaje = "Error al guardar";
+        }
+    }
+
+    private void Limpiar()
+    {
+        Usuarios = new Usuarios();
+    }
+
+    public void Buscar()
+    {
+        UsuariosController controller = new UsuariosController();
+
+        var ususarios = controller.Buscar(Usuarios.UsuarioId);
+
+        if (ususarios != null)
+        {
+            Usuarios = ususarios;
+        }
+        else
+        {
+            this.Usuarios = new Usuarios();
+            mensaje = "Usuario no encontrado";
+        }
+    }
+
+    public void Eliminar()
+    {
+        UsuariosController controller = new UsuariosController();
+
+        var ususarios = controller.Buscar(Usuarios.UsuarioId);
+
+        if (ususarios != null)
+        {
+            if (controller.Eliminar(Usuarios.UsuarioId))
+            {
+                this.Usuarios = new Usuarios();
+                mensaje = "Usuario Eliminado";
+            }
+            else
+            {
+                this.Usuarios = new Usuarios();
+                mensaje = "Error al Eliminar";
+            }
+        }
+    }
+}

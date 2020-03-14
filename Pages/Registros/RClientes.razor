@@ -1,5 +1,117 @@
-﻿<h3>RClientes</h3>
+﻿@page "/Cliente"
+
+<h3>RClientes</h3>
+
+<EditForm Model="Clientes" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="IdInput">ArticuloId</label>
+        <InputNumber Id="IdInput" @bind-Value="Clientes.ClienteId" class="form-group"></InputNumber>
+        <button type="button" class="btn btn-outline-primary mt-2" @onclick="Buscar">Buscar</button>
+    </div>
+
+    <div class="form-group">
+        <label for="FechaInput">Fecha</label>
+        <InputDate Id="FechaInput" @bind-Value="Clientes.Fecha" class="form-control"></InputDate>
+    </div>
+
+    <div class="form-group">
+        <label for="NombresInput">Nombres</label>
+        <InputText Id="DescripcionInput" @bind-Value="Clientes.Nombres" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="EmailInput">Email</label>
+        <InputText Id="DescripcionInput" @bind-Value="Clientes.Email" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="DireccionInput">Direccion</label>
+        <InputText Id="DescripcionInput" @bind-Value="Clientes.Direccion" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="TelefonoInput">Telefono</label>
+        <InputText Id="DescripcionInput" @bind-Value="Clientes.Telefono" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="CelularInput">Celular</label>
+        <InputText Id="DescripcionInput" @bind-Value="Clientes.Celular" class="form-control"></InputText>
+    </div>
+
+    <div>
+        <button class="btn btn-outline-secondary" type="button" @onclick="Limpiar">Limpiar</button>
+        <button class="btn btn-outline-success" type="submit">Guardar</button>
+        <button class="btn btn-outline-danger" type="button" @onclick="Eliminar">Eliminar</button>
+    </div>
+
+    <h5>@mensaje</h5>
+
+</EditForm>
 
 @code {
 
+    public Clientes Clientes = new Clientes();
+    public string mensaje = "";
+
+    public void Guardar()
+    {
+        ClienteController controller = new ClienteController();
+
+        if (controller.Guardar(Clientes))
+        {
+            this.Clientes = new Clientes();
+            mensaje = "Cliente Guardado";
+        }
+        else
+        {
+            this.Clientes = new Clientes();
+            mensaje = "Error al guardar";
+        }
+    }
+
+    private void Limpiar()
+    {
+        Clientes = new Clientes();
+    }
+
+    public void Buscar()
+    {
+        ClienteController controller = new ClienteController();
+
+        var clientes = controller.Buscar(Clientes.ClienteId);
+
+        if (clientes != null)
+        {
+            Clientes = clientes;
+        }
+        else
+        {
+            this.Clientes = new Clientes();
+            mensaje = "Cliente no encontrado";
+        }
+    }
+
+    public void Eliminar()
+    {
+        ClienteController controller = new ClienteController();
+
+        var clientes = controller.Buscar(Clientes.ClienteId);
+
+        if (clientes != null)
+        {
+            if (controller.Eliminar(Clientes.ClienteId))
+            {
+                this.Clientes = new Clientes();
+                mensaje = "Cliente Eliminado";
+            }
+            else
+            {
+                this.Clientes = new Clientes();
+                mensaje = "Error al Eliminar";
+            }
+        }
+    }
 }

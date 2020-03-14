@@ -16,7 +16,6 @@ namespace FerreteriaSystem.Models
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public string Celular { get; set; }
-        public int Deuda { get; set; }
 
         public Clientes()
         {
@@ -27,7 +26,6 @@ namespace FerreteriaSystem.Models
             Direccion = string.Empty;
             Telefono = string.Empty;
             Celular = string.Empty;
-            Deuda = 0;
         }
     }
 }
