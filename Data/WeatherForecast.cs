@@ -2,7 +2,7 @@ using System;
 
 namespace FerreteriaSystem.Data
 {
-    public class WeatherForecast
+    public class WeatherForecast 
     {
         public DateTime Date { get; set; }
 
