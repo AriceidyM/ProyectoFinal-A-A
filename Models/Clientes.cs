@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FerreteriaSystem.Models
 {
-    public class Clientes
+    public class Clientes 
     {
         [Key]
         public int ClienteId { get; set; }
