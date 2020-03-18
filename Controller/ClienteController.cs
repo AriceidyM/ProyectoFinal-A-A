@@ -11,105 +11,159 @@ namespace FerreteriaSystem.Controller
 {
     public class ClienteController
     {
-        public bool Guardar(Clientes clientes)
+        public bool Guardar(Clientes cliente)
         {
-            Contexto db = new Contexto();
+            Contexto contexto = new Contexto();
             bool paso = false;
 
             try
             {
-                if (clientes.ClienteId == 0)
+                if (cliente.ClienteId == 0)
                 {
-                    paso = Insertar(clientes);
+                    paso = Insertar(cliente);
+
                 }
                 else
                 {
-                    paso = Modificar(clientes);
+                    paso = Modificar(cliente);
+
                 }
             }
             catch (Exception)
             {
-
                 throw;
+
             }
-            return paso;
-        }
+            finally
+            {
+                contexto.Dispose();
 
-        private bool Insertar(Clientes clientes)
-        {
-            Contexto db = new Contexto();
-            bool paso = false;
-
-            db.Clientes.Add(clientes);
-            paso = db.SaveChanges() > 0;
+            }
 
             return paso;
         }
 
-        private bool Modificar(Clientes clientes)
+        private bool Insertar(Clientes cliente)
         {
-            Contexto db = new Contexto();
+            Contexto contexto = new Contexto();
             bool paso = false;
 
-            db.Clientes.Add(clientes).State = EntityState.Modified;
-            paso = db.SaveChanges() > 0;
+            try
+            {
+                contexto.Clientes.Add(cliente);
+                paso = contexto.SaveChanges() > 0;
+
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
+            finally
+            {
+                contexto.Dispose();
+
+            }
+
+            return paso;
+        }
+
+        private bool Modificar(Clientes cliente)
+        {
+            Contexto contexto = new Contexto();
+            bool paso = false;
+
+            try
+            {
+                contexto.Entry(cliente).State = EntityState.Modified;
+                paso = contexto.SaveChanges() > 0;
+
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
+            finally
+            {
+                contexto.Dispose();
+
+            }
 
             return paso;
         }
 
         public Clientes Buscar(int id)
         {
-            Contexto db = new Contexto();
-            Clientes clientes = new Clientes();
+            Contexto contexto = new Contexto();
+            Clientes cliente = new Clientes();
 
             try
             {
-                clientes = db.Clientes.Find(id);
+                cliente = contexto.Clientes.Find(id);
+
             }
             catch (Exception)
             {
-
                 throw;
+
             }
-            return clientes;
+            finally
+            {
+                contexto.Dispose();
+
+            }
+
+            return cliente;
         }
 
         public bool Eliminar(int id)
         {
-            Contexto db = new Contexto();
+            Contexto contexto = new Contexto();
             bool paso = false;
-            Clientes Clientes = new Clientes();
+            Clientes cliente = new Clientes();
 
             try
             {
-                Clientes = db.Clientes.Find(id);
-                db.Entry(Clientes).State = EntityState.Deleted;
+                cliente = contexto.Clientes.Find(id);
+                contexto.Entry(cliente).State = EntityState.Deleted;
+                paso = contexto.SaveChanges() > 0;
 
-                paso = db.SaveChanges() > 0;
             }
             catch (Exception)
             {
-
                 throw;
-            }
 
+            }
+            finally
+            {
+                contexto.Dispose();
+
+            }
             return paso;
         }
 
-        public List<Clientes> GetClientes(Expression<Func<Clientes, bool>> expression)
+        public List<Clientes> GetList(Expression<Func<Clientes, bool>> expression)
         {
-            List<Clientes> lista;
-            Contexto db = new Contexto();
+            Contexto contexto = new Contexto();
+            List<Clientes> ListadoClientes;
+
             try
             {
-                lista = db.Clientes.Where(expression).ToList();
+                ListadoClientes = contexto.Clientes.Where(expression).ToList();
+
             }
             catch (Exception)
             {
-
                 throw;
+
             }
-            return lista;
+            finally
+            {
+                contexto.Dispose();
+
+            }
+            return ListadoClientes;
         }
     }
 }

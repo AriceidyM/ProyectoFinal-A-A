@@ -10,9 +10,13 @@ namespace FerreteriaSystem.Models
     {
         [Key]
         public int UsuarioId { get; set; }
+        [Required(ErrorMessage = "El campo Nombres obligatorio.")]
         public string Nombres { get; set; }
+        [Required(ErrorMessage = "El campo Email es obligatorio.")]
         public string Email { get; set; }
+        [Required(ErrorMessage = "El campo Nivel de usuario es obligatorio.")]
         public string NivelUsuario { get; set; }
+        [Required(ErrorMessage = "El campo Usuario es obligatorio.")]
         public string Usuario { get; set; }
         public string Clave { get; set; }
         public DateTime FechaIngreso { get; set; }

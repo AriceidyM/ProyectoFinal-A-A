@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace FerreteriaSystem.Controller
 {
-    public class EntradaController
+    public class ProductoController
     {
-        public bool Guardar(Entrada entrada)
+        public bool Guardar(Productos producto)
         {
             Contexto contexto = new Contexto();
             bool paso = false;
             try
             {
-                if (entrada.ProductoId == 0)
+                if (producto.ProductoId == 0)
                 {
-                    paso = Insertar(entrada);
+                    paso = Insertar(producto);
                 }
                 else
                 {
-                    paso = Modificar(entrada);
+                    paso = Modificar(producto);
                 }
             }
             catch (Exception)
@@ -33,14 +33,14 @@ namespace FerreteriaSystem.Controller
             return paso;
         }
 
-        private bool Insertar(Entrada entrada)
+        private bool Insertar(Productos producto)
         {
             Contexto contexto = new Contexto();
             bool paso = false;
 
             try
             {
-                contexto.Entrada.Add(entrada);
+                contexto.Productos.Add(producto);
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -50,15 +50,15 @@ namespace FerreteriaSystem.Controller
             return paso;
         }
 
-        private bool Modificar(Entrada entrada)
+        private bool Modificar(Productos producto)
         {
             Contexto contexto = new Contexto();
             bool paso = false;
 
             try
             {
-                contexto.Entrada.Add(entrada);
-                contexto.Entry(entrada).State = EntityState.Modified;
+                contexto.Productos.Add(producto);
+                contexto.Entry(producto).State = EntityState.Modified;
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -68,32 +68,32 @@ namespace FerreteriaSystem.Controller
             return paso;
         }
 
-        public Entrada Buscar(int id)
+        public Productos Buscar(int id)
         {
             Contexto contexto = new Contexto();
-            Entrada entrada = new Entrada();
+            Productos producto = new Productos();
 
             try
             {
-                entrada = contexto.Entrada.Find(id);
+                producto = contexto.Productos.Find(id);
             }
             catch (Exception)
             {
                 throw;
             }
-            return entrada;
+            return producto;
         }
 
         public bool Eliminar(int id)
         {
             Contexto contexto = new Contexto();
             bool paso = false;
-            Entrada entrada = new Entrada();
+            Productos producto = new Productos();
 
             try
             {
-                entrada = contexto.Entrada.Find(id);
-                contexto.Entry(entrada).State = EntityState.Deleted;
+                producto = contexto.Productos.Find(id);
+                contexto.Entry(producto).State = EntityState.Deleted;
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -103,14 +103,14 @@ namespace FerreteriaSystem.Controller
             return paso;
         }
 
-        public List<Entrada> GetList(Expression<Func<Entrada, bool>> expression)
+        public List<Productos> GetList(Expression<Func<Productos, bool>> expression)
         {
             Contexto contexto = new Contexto();
-            List<Entrada> lista;
+            List<Productos> lista;
 
             try
             {
-                lista = contexto.Entrada.Where(expression).ToList();
+                lista = contexto.Productos.Where(expression).ToList();
             }
             catch (Exception)
             {

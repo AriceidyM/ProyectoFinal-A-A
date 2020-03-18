@@ -1,5 +1,334 @@
-﻿<h3>RVentas</h3>
+﻿@page "/Ventas"
 
+<h3>Registro de Ventas</h3>
+
+<EditForm Model="Ventas" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="form-group row">
+                    <!--Factura Id-->
+                    <label for="FacturaId " class="col-auto">Factura Id</label>
+                    <div class="input-group  col-sm-3">
+                        <InputNumber @bind-Value="@Ventas.VentaId" class="form-control" />
+                        <ValidationMessage For="@(()=>Ventas.VentaId)" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+                        </div>
+                    </div>
+                    <!--Fecha-->
+                    <label for="fecha">Fecha</label>
+                    <div align="right" class="input-group col-md-6">
+                        <div class="col-sm-6">
+                            <InputDate @bind-Value="@Ventas.Fecha" class="form-control" />
+                            <ValidationMessage For="@(()=>Ventas.Fecha)" />
+                        </div>
+                    </div>
+                </div>
+                <!--Cliente-->
+                <div class="form-group row">
+                    <label class="col-auto" for="cliente">Cliente</label>
+                    <div class="col-md-6 no-padding">
+                        <InputSelect @bind-Value="@ClienteSelect" class="form-control " @onchange="CargarCliente" @onclick="CargarCliente">
+                            <option value="" disabled selected>Seleccione un Cliente</option>
+                            @foreach (var item in ListaCliente)
+                            {
+                                <option value="@item.ClienteId">@item.Nombres</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-4 no-padding">
+                        <label for="producto">Producto</label>
+
+                        <!--Producto-->
+                        <InputSelect @bind-Value="@ProductoSelect" class="form-control" @onchange="CargarProducto" @onclick="CargarProducto">
+
+                            @if (ListaProducto.Count == 0)
+                            {
+                                <option value="">No hay Producto Registrado</option>
+                            }
+                            else
+                            {
+                                <option value="" disabled selected>Seleccione un Producto</option>
+
+                                @foreach (var item in ListaProducto)
+                                {
+                                    <option value="@item.ProductoId">@item.Descripcion</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+                    <!--Cantidad-->
+                    <div class="col-2">
+                        <label class="col-auto" for="Cantidad">Cantidad:</label>
+                        <InputNumber @bind-Value="@Cantidad" class="form-control"></InputNumber>
+                    </div>
+                    <!--Precio-->
+                    <div class="col-2">
+                        <label class="col-auto" for="precio">Precio:</label>
+                        <InputNumber @bind-Value="@Precio" class="form-control" disabled ></InputNumber>
+                    </div>
+                    <!--Importe-->
+                    <div class="col-2">
+                        <label class="col-auto" for="importe">Importe:</label>
+                        <InputNumber @bind-Value="@Importe" class="form-control "></InputNumber>
+                    </div>
+                    <div class="form-group">
+                        <br />
+                        <button type="button" class="btn btn-outline-primary" @onclick="AgregarProducto">Agregar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>ProductoId</th>
+                                    <th>Descripcion</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Ventas.Detalle)
+                                {
+                                    <tr>
+                                        <th>@item.VentaId</th>
+                                        <th>@item.ProductoId</th>
+                                        <th>@item.Descripcion</th>
+                                        <th>@item.Cantidad</th>
+                                        <th>@item.Precio</th>
+                                        <th><button type="button" class="btn btn-outline-danger btn-sm" @onclick="(()=> EliminarProducto(item))">Eliminar</button></th>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <label>Total</label>
+                        <div class="col-2 ">
+                            <InputNumber @bind-Value="@Ventas.Total" class="form-control" disabled></InputNumber>
+                        </div>
+                    </div>
+
+                </div>
+
+                <br />
+
+                <div class="text-center">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="Limpiar">Limpiar</button>
+                    <button type="submit" class="btn btn-outline-success">Guardar</button>
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">Eliminar</button>
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Atencion</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                    <button type="button" data-dismiss="modal" class="btn btn-outline-danger" @onclick="Eliminar">Si</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="text-success">@mensaje</h5>
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+</EditForm>
 @code {
+
+
+    [Parameter]
+    public int VentaId { get; set; }
+
+    public Ventas Ventas { get; set; }
+
+    ClienteController clientesController = new ClienteController();
+    ProductoController productosController = new ProductoController();
+    VentasController controller = new VentasController();
+    private string ProductoSelect { get; set; }
+    private string ClienteSelect { get; set; }
+
+
+    private string mensaje = "";
+
+    private int Cantidad = 0;
+    private int Precio = 0;
+    private int Importe = 0;
+
+    private List<Productos> ListaProducto = new List<Productos>();
+    private List<Clientes> ListaCliente = new List<Clientes>();
+
+    private Clientes Cliente { get; set; }
+    private Productos Producto { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ListaCliente = clientesController.GetList(e => true);
+        ListaProducto = productosController.GetList(e => true);
+        Ventas = new Ventas();
+        Cliente = new Clientes();
+        Producto = new Productos();
+
+        if (VentaId != 0)
+        {
+            Ventas.VentaId = VentaId;
+            Buscar();
+        }
+    }
+
+
+    private void CargarProducto()
+    {
+        try
+        {
+            Producto = productosController.Buscar(Convert.ToInt32(ProductoSelect));
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.ToString();
+        }
+    }
+
+    private void CargarCliente()
+    {
+        try
+        {
+            Cliente = clientesController.Buscar(Convert.ToInt32(ClienteSelect));
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.ToString();
+        }
+    }
+
+    private void AgregarProducto()
+    {
+
+        if (ProductoSelect == null)
+        {
+            mensaje = "debe seleccionar un Producto";
+        }
+        else
+        {
+            if (Precio <= 0)
+            {
+                mensaje = "El precio es Obligatorio";
+            }
+            else
+            {
+                if (Ventas.Detalle.Any(i => i.ProductoId == Producto.ProductoId))
+                {
+                    mensaje = "Este Producto ya esta agregado";
+                }
+                else
+                {
+                    mensaje = "";
+                    Ventas.Detalle.Add(new VentasDetalles()
+                    {
+                        VentaId = Ventas.VentaId,
+                        ProductoId = Producto.ProductoId,
+                        Descripcion = Producto.Descripcion,
+                        Cantidad = Cantidad,
+                        Precio = Precio,
+                        Importe = (Cantidad * Precio)
+                    });
+                    Producto = new Productos();
+
+                    int total = 0;
+
+                    foreach (var item in Ventas.Detalle)
+                    {
+                    }
+
+                    Ventas.Total = total;
+                }
+            }
+        }
+    }
+
+    private void EliminarProducto(VentasDetalles detalle)
+    {
+        Ventas.Detalle.Remove(detalle);
+    }
+
+    public void Guardar()
+    {
+        Ventas.ClienteId = Convert.ToInt32(ClienteSelect);
+        
+        mensaje = "";
+        if (controller.Guardar(Ventas))
+        {
+            Limpiar();
+            mensaje = "Venta Guardada";
+        }
+        else
+        {
+            mensaje = "Error al guardar Venta";
+        }
+    }
+
+    public void Buscar()
+    {
+        VentasController controller = new VentasController();
+
+        var ventas = controller.Buscar(Ventas.VentaId);
+
+        if (ventas != null)
+        {
+            Ventas = ventas;
+        }
+        else
+        {
+            Ventas = new Ventas();
+            mensaje = "Venta no existe";
+        }
+    }
+
+    public void Eliminar()
+    {
+        VentasController controller = new VentasController();
+
+
+        var factura = controller.Buscar(Ventas.VentaId);
+
+        if (Ventas != null)
+        {
+            controller.Eliminar(Ventas.VentaId);
+            Limpiar();
+            mensaje = "Venta Eliminada";
+        }
+        else
+        {
+            mensaje = "Error al Eliminar";
+        }
+    }
+
+    public void Limpiar()
+    {
+        mensaje = "";
+        this.Ventas = new Ventas();
+    }
 
 }

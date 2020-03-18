@@ -1,5 +1,173 @@
-﻿<h3>RProductos</h3>
+﻿@page "/Productos"
+@page "/rProductos/{ProductoId:int}"
+
+<h3>Registro de Productos</h3>
+
+<EditForm Model="Producto" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="center-align">
+        <div class="card ">
+
+            <div class="form-group row">
+                <!--Producto Id-->
+                <label for="ProductoId " class="col-auto">Producto Id</label>
+                <div class="input-group  col-sm-3">
+                    <InputNumber @bind-Value="@Producto.ProductoId" class="form-control" />
+                    <ValidationMessage For="@(()=>Producto.ProductoId)" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+                    </div>
+                </div>
+                <!--Fecha-->
+                <label for="fecha">Fecha</label>
+                <div align="right" class="input-group col-md-6">
+                    <div class="col-sm-6">
+                        <InputDate @bind-Value="@Producto.Fecha" class="form-control" />
+                        <ValidationMessage For="@(()=>Producto.Fecha)" />
+                    </div>
+                </div>
+            </div>
+
+            <label for="descripcion">Descripcion</label>
+            <div class="input-field col s4">
+                <InputText @bind-Value="@Producto.Descripcion" class="form-control" placeholder="Descripcion" />
+                <ValidationMessage For="@(()=>Producto.Descripcion)" />
+            </div>
+
+            <div class="form-group row">
+                <label class="col-auto" for="categoria">Categoria</label>
+                <div class="col-md-6 no-padding">
+                    <InputSelect @bind-Value="@CategoriaSelect" class="form-control " @onchange="CargarCategoria" @onclick="CargarCategoria">
+                        <option value="" disabled selected>Seleccione una Categoria</option>
+                        @foreach (var item in ListaCategoria)
+                        {
+                            <option value="@item.CategoriaId">@item.Nombre</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+
+            <div class="input-field col s6">
+                <label for="Existencia">Existencia</label>
+                <InputNumber @bind-Value="@Producto.Existencia" class="form-control" />
+                <ValidationMessage For="@(()=>Producto.Existencia)" />
+            </div>
+
+            <div class="input-field col s6">
+                <label for="precio">Precio</label>
+                <InputNumber @bind-Value="@Producto.Precio" class="form-control" />
+                <ValidationMessage For="@(()=>Producto.Precio)" />
+            </div>
+
+            <br />
+            <br />
+            <div class="input-field col s6">
+                <button type="button" class="btn btn-outline-primary" @onclick="Limpiar">Limpiar</button>
+                <button type="submit" class="btn btn-outline-success">Guardar</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
+            </div>
+
+            <h5 class="text-success">@mensaje</h5>
+
+        </div>
+    </div>
+</EditForm>
 
 @code {
 
+    [Parameter]
+    public int ProductoId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Producto = new Productos();
+        ListaCategoria = categoriaController.GetList(e => true);
+        Categoria = new CategoriaProductos();
+
+        if (ProductoId != 0)
+        {
+            Producto.ProductoId = ProductoId;
+            Buscar();
+        }
+    }
+
+    Productos Producto { get; set; }
+    string mensaje;
+    public string CategoriaSelect;
+
+    private List<CategoriaProductos> ListaCategoria = new List<CategoriaProductos>();
+
+    private CategoriaProductos Categoria { get; set; }
+
+    CategoriaProductoController categoriaController = new CategoriaProductoController();
+
+    ProductoController controller = new ProductoController();
+
+    public void Guardar()
+    {
+        //Producto.CategoriaProductos = Convert.ToInt32(CategoriaSelect);
+
+        if (controller.Guardar(Producto))
+        {
+            Limpiar();
+            mensaje = "Producto Guardado con Exito!!!";
+        }
+        else
+        {
+            Limpiar();
+            mensaje = "Error al guardar Producto";
+        }
+    }
+
+    public void Buscar()
+    {
+        var producto = controller.Buscar(Producto.ProductoId);
+
+        if (producto != null)
+        {
+            Producto = producto;
+            //CategoriaSelect = Convert.ToString(Producto.CategoriaProductos);
+        }
+        else
+        {
+            Limpiar();
+            mensaje = "Producto no Existe";
+        }
+    }
+
+    public void Eliminar()
+    {
+        var producto = controller.Buscar(Producto.ProductoId);
+
+        if (producto != null)
+        {
+            controller.Eliminar(Producto.ProductoId);
+            Limpiar();
+            mensaje = "Producto Eliminado";
+        }
+        else
+        {
+            Limpiar();
+            mensaje = "Error al eliminar";
+        }
+    }
+
+    public void Limpiar()
+    {
+        this.Producto = new Productos();
+        mensaje = "";
+        CategoriaSelect = "";
+    }
+
+    private void CargarCategoria()
+    {
+        try
+        {
+            Categoria = categoriaController.Buscar(Convert.ToInt32(CategoriaSelect));
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.ToString();
+        }
+    }
 }

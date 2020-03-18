@@ -10,8 +10,10 @@ namespace FerreteriaSystem.Models
     {
         [Key]
         public int ProductoId { get; set; }
+        [Required(ErrorMessage = "La Descripcion es obligatoria.")]
         public string Descripcion { get; set; }
         public int Existencia { get; set; }
+        [Range(minimum: 1, maximum: 1000000, ErrorMessage = "El Precio debe ser mayor a cero")]
         public Decimal Precio { get; set; }
         public DateTime Fecha { get; set; }
 

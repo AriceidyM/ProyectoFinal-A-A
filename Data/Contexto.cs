@@ -9,7 +9,11 @@ namespace FerreteriaSystem.Data
 {
     public class Contexto : DbContext
     {
+        public DbSet<Ventas> Ventas { get; set; }
+        public DbSet<Productos> Productos { get; set; }
+        public DbSet<CategoriaProductos> Categorias { get; set; }
         public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<Entrada> Entrada { get; set; }
         public DbSet<Clientes> Clientes { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
