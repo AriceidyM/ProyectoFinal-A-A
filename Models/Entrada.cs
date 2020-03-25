@@ -13,14 +13,14 @@ namespace FerreteriaSystem.Models
         public DateTime Fecha { get; set; }
         public int ProductoId { get; set; }
         [Range(minimum: 1, maximum: 1000000, ErrorMessage = "La cantidad debe ser mayor a cero")]
-        public int Cantidad { get; set; }
+        public string Cantidad { get; set; }
 
         public Entrada()
         {
             EntradaId = 0;
             Fecha = DateTime.Now;
             ProductoId = 0;
-            Cantidad = 0;
+            Cantidad = string.Empty;
         }
     }
 }

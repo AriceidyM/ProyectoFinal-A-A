@@ -29,17 +29,25 @@
                     </div>
                 </div>
                 <!--Cliente-->
-                <div class="form-group row">
+                <div class="form-group">
                     <label class="col-auto" for="cliente">Cliente</label>
-                    <div class="col-md-6 no-padding">
-                        <InputSelect @bind-Value="@ClienteSelect" class="form-control " @onchange="CargarCliente" @onclick="CargarCliente">
-                            <option value="" disabled selected>Seleccione un Cliente</option>
-                            @foreach (var item in ListaCliente)
-                            {
-                                <option value="@item.ClienteId">@item.Nombres</option>
-                            }
-                        </InputSelect>
-                    </div>
+                    <InputSelect @bind-Value="@ClienteSelect" class="form-control " @onchange="CargarCliente" @onclick="CargarCliente">
+                        <option value="" disabled selected>Seleccione un Cliente</option>
+                        @foreach (var item in ListaCliente)
+                        {
+                            <option value="@item.ClienteId">@item.Nombres</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="form-group">
+                    <label class="col-auto" for="cliente">Categoria</label>
+                    <InputSelect @bind-Value="@CategoriaSelect" class="form-control " @onchange="CargarCategoria" @onclick="CargarCategoria">
+                        <option value="" disabled selected>Seleccione una categoria</option>
+                        @foreach (var item in ListaCategoria)
+                        {
+                            <option value="@item.CategoriaId">@item.Nombre</option>
+                        }
+                    </InputSelect>
                 </div>
 
                 <div class="form-group row">
@@ -72,7 +80,7 @@
                     <!--Precio-->
                     <div class="col-2">
                         <label class="col-auto" for="precio">Precio:</label>
-                        <InputNumber @bind-Value="@Precio" class="form-control" disabled ></InputNumber>
+                        <InputNumber @bind-Value="@Precio" class="form-control" disabled></InputNumber>
                     </div>
                     <!--Importe-->
                     <div class="col-2">
@@ -111,8 +119,18 @@
                                     </tr>
                                 }
                             </tbody>
-                        </table>
 
+                        </table>
+                    </div>
+                    <div class="form-group row">
+                        <label>SubTotal</label>
+                        <div class="col-2 ">
+                            <InputNumber @bind-Value="@Ventas.Total" class="form-control" disabled></InputNumber>
+                        </div>
+                        <label>ITBIS</label>
+                        <div class="col-2 ">
+                            <InputNumber @bind-Value="@Ventas.Total" class="form-control" disabled></InputNumber>
+                        </div>
                         <label>Total</label>
                         <div class="col-2 ">
                             <InputNumber @bind-Value="@Ventas.Total" class="form-control" disabled></InputNumber>
@@ -166,10 +184,11 @@
 
     ClienteController clientesController = new ClienteController();
     ProductoController productosController = new ProductoController();
+    CategoriaProductoController CategoriaController = new CategoriaProductoController();
     VentasController controller = new VentasController();
     private string ProductoSelect { get; set; }
     private string ClienteSelect { get; set; }
-
+    private string CategoriaSelect { get; set; }
 
     private string mensaje = "";
 
@@ -179,9 +198,11 @@
 
     private List<Productos> ListaProducto = new List<Productos>();
     private List<Clientes> ListaCliente = new List<Clientes>();
+    private List<CategoriaProductos> ListaCategoria = new List<CategoriaProductos>();
 
     private Clientes Cliente { get; set; }
     private Productos Producto { get; set; }
+    private CategoriaProductos Categorias { get; set; }
 
     protected override void OnInitialized()
     {
@@ -190,6 +211,7 @@
         Ventas = new Ventas();
         Cliente = new Clientes();
         Producto = new Productos();
+        Categorias = new CategoriaProductos();
 
         if (VentaId != 0)
         {
@@ -198,6 +220,18 @@
         }
     }
 
+    //private void Calcular()
+    //{
+    //    decimal total = 0;
+
+    //    foreach (var item in Ventas.Detalle)
+    //    {
+    //        total += item.SubTotal;
+    //    }
+
+    //    Ventas.Total = Total;
+
+    //}
 
     private void CargarProducto()
     {
@@ -216,6 +250,18 @@
         try
         {
             Cliente = clientesController.Buscar(Convert.ToInt32(ClienteSelect));
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.ToString();
+        }
+    }
+
+    private void CargarCategoria()
+    {
+        try
+        {
+            //Categorias = CategoriaProductoController.Buscar(Convert.ToInt32(ClienteSelect));
         }
         catch (Exception ex)
         {
@@ -276,7 +322,7 @@
     public void Guardar()
     {
         Ventas.ClienteId = Convert.ToInt32(ClienteSelect);
-        
+
         mensaje = "";
         if (controller.Guardar(Ventas))
         {
@@ -328,7 +374,7 @@
     public void Limpiar()
     {
         mensaje = "";
-        this.Ventas = new Ventas();
+        Ventas = new Ventas();
     }
 
 }

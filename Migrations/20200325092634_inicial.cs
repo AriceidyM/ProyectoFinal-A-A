@@ -39,6 +39,21 @@ namespace FerreteriaSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Entrada",
+                columns: table => new
+                {
+                    EntradaId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    ProductoId = table.Column<int>(nullable: false),
+                    Cantidad = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Entrada", x => x.EntradaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
                 {
@@ -64,7 +79,7 @@ namespace FerreteriaSystem.Migrations
                     Email = table.Column<string>(nullable: false),
                     NivelUsuario = table.Column<string>(nullable: false),
                     Usuario = table.Column<string>(nullable: false),
-                    Clave = table.Column<string>(nullable: true),
+                    Clave = table.Column<string>(nullable: false),
                     FechaIngreso = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -79,7 +94,6 @@ namespace FerreteriaSystem.Migrations
                     VentaId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateTime>(nullable: false),
-                    TipoVenta = table.Column<string>(nullable: true),
                     ClienteId = table.Column<int>(nullable: false),
                     SubTotal = table.Column<int>(nullable: false),
                     ITBIS = table.Column<int>(nullable: false),
@@ -139,6 +153,9 @@ namespace FerreteriaSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "Entrada");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

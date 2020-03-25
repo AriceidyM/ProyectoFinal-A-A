@@ -11,7 +11,7 @@ namespace FerreteriaSystem.Models
         [Key]
         public int VentaId { get; set; }
         public DateTime Fecha { get; set; }
-        public string TipoVenta { get; set; }
+        [Required(ErrorMessage = "El cliente no puede estar vacio")]
         public int ClienteId { get; set; }
         public int SubTotal { get; set; }
         public int ITBIS { get; set; }
@@ -22,7 +22,6 @@ namespace FerreteriaSystem.Models
         {
             VentaId = 0;
             Fecha = DateTime.Now;
-            TipoVenta = string.Empty;
             ClienteId = 0;
             SubTotal = 0;
             ITBIS = 0;

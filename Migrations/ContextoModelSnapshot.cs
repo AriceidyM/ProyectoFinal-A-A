@@ -14,7 +14,7 @@ namespace FerreteriaSystem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2");
+                .HasAnnotation("ProductVersion", "3.1.3");
 
             modelBuilder.Entity("FerreteriaSystem.Models.CategoriaProductos", b =>
                 {
@@ -67,6 +67,26 @@ namespace FerreteriaSystem.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("FerreteriaSystem.Models.Entrada", b =>
+                {
+                    b.Property<int>("EntradaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Cantidad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EntradaId");
+
+                    b.ToTable("Entrada");
+                });
+
             modelBuilder.Entity("FerreteriaSystem.Models.Productos", b =>
                 {
                     b.Property<int>("ProductoId")
@@ -98,6 +118,7 @@ namespace FerreteriaSystem.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Clave")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -141,9 +162,6 @@ namespace FerreteriaSystem.Migrations
 
                     b.Property<int>("SubTotal")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("TipoVenta")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("Total")
                         .HasColumnType("INTEGER");

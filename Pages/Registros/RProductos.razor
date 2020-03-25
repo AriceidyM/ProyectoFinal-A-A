@@ -5,72 +5,56 @@
 
 <EditForm Model="Producto" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <div class="center-align">
-        <div class="card ">
-
-            <div class="form-group row">
-                <!--Producto Id-->
-                <label for="ProductoId " class="col-auto">Producto Id</label>
-                <div class="input-group  col-sm-3">
-                    <InputNumber @bind-Value="@Producto.ProductoId" class="form-control" />
-                    <ValidationMessage For="@(()=>Producto.ProductoId)" />
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
-                    </div>
+                
+    <div class="form-group">
+        <label for="IdInput">ClienteId</label>
+        <InputNumber Id="IdInput" @bind-Value="Producto.ProductoId" class="form-inline"></InputNumber>
+        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+    </div>
+               
+                <div class="form-group">
+                    <label for="FechaInput">Fecha</label>
+                    <InputDate Id="FechaInput" @bind-Value="Producto.Fecha" class="form-inline"></InputDate>
                 </div>
-                <!--Fecha-->
-                <label for="fecha">Fecha</label>
-                <div align="right" class="input-group col-md-6">
-                    <div class="col-sm-6">
-                        <InputDate @bind-Value="@Producto.Fecha" class="form-control" />
-                        <ValidationMessage For="@(()=>Producto.Fecha)" />
-                    </div>
-                </div>
-            </div>
 
             <label for="descripcion">Descripcion</label>
-            <div class="input-field col s4">
-                <InputText @bind-Value="@Producto.Descripcion" class="form-control" placeholder="Descripcion" />
+            <div class="input">
+                <InputText @bind-Value="@Producto.Descripcion" class="form-inline" placeholder="Descripcion" />
                 <ValidationMessage For="@(()=>Producto.Descripcion)" />
             </div>
 
-            <div class="form-group row">
-                <label class="col-auto" for="categoria">Categoria</label>
-                <div class="col-md-6 no-padding">
-                    <InputSelect @bind-Value="@CategoriaSelect" class="form-control " @onchange="CargarCategoria" @onclick="CargarCategoria">
-                        <option value="" disabled selected>Seleccione una Categoria</option>
-                        @foreach (var item in ListaCategoria)
-                        {
-                            <option value="@item.CategoriaId">@item.Nombre</option>
-                        }
-                    </InputSelect>
-                </div>
+            <label for="Categoria">Categoria</label>
+            <div class="input">
+                <InputSelect @bind-Value="@CategoriaSelect" class="form-inline " @onchange="CargarCategoria" @onclick="CargarCategoria">
+                    <option value="" disabled selected>Seleccione una Categoria</option>
+                    @foreach (var item in ListaCategoria)
+                    {
+                        <option value="@item.CategoriaId">@item.Nombre</option>
+                    }
+                </InputSelect>
             </div>
 
-            <div class="input-field col s6">
                 <label for="Existencia">Existencia</label>
-                <InputNumber @bind-Value="@Producto.Existencia" class="form-control" />
-                <ValidationMessage For="@(()=>Producto.Existencia)" />
-            </div>
+                <div class="input">
+                    <InputNumber @bind-Value="@Producto.Existencia" class= "form-inline"  ReadOnly="true" @onchange="CargarCantidad" @onclick="CargarCantidad"/>
+                    <ValidationMessage For="@(()=>Producto.Existencia)" />
+                </div>
 
-            <div class="input-field col s6">
-                <label for="precio">Precio</label>
-                <InputNumber @bind-Value="@Producto.Precio" class="form-control" />
-                <ValidationMessage For="@(()=>Producto.Precio)" />
-            </div>
+             <label for="precio">Precio</label>
+                 <div class="input">
+                    <InputNumber @bind-Value="@Producto.Precio" class="form-inline" />
+                    <ValidationMessage For="@(()=>Producto.Precio)" />
+                 </div>
 
-            <br />
-            <br />
-            <div class="input-field col s6">
-                <button type="button" class="btn btn-outline-primary" @onclick="Limpiar">Limpiar</button>
-                <button type="submit" class="btn btn-outline-success">Guardar</button>
-                <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
-            </div>
+                <br />
+                <br />
+                <div class="input-field col s6">
+                    <button type="button" class="btn btn-outline-primary" @onclick="Limpiar">Limpiar</button>
+                    <button type="submit" class="btn btn-outline-success">Guardar</button>
+                    <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
+                </div>
 
-            <h5 class="text-success">@mensaje</h5>
-
-        </div>
-    </div>
+                <h5 class="text-success">@mensaje</h5>
 </EditForm>
 
 @code {
@@ -83,6 +67,7 @@
         Producto = new Productos();
         ListaCategoria = categoriaController.GetList(e => true);
         Categoria = new CategoriaProductos();
+        Entrada = new Entrada();
 
         if (ProductoId != 0)
         {
@@ -99,14 +84,14 @@
 
     private CategoriaProductos Categoria { get; set; }
 
+    private Entrada Entrada { get; set; }
+
     CategoriaProductoController categoriaController = new CategoriaProductoController();
 
     ProductoController controller = new ProductoController();
 
     public void Guardar()
     {
-        //Producto.CategoriaProductos = Convert.ToInt32(CategoriaSelect);
-
         if (controller.Guardar(Producto))
         {
             Limpiar();
@@ -126,7 +111,6 @@
         if (producto != null)
         {
             Producto = producto;
-            //CategoriaSelect = Convert.ToString(Producto.CategoriaProductos);
         }
         else
         {
@@ -157,6 +141,18 @@
         this.Producto = new Productos();
         mensaje = "";
         CategoriaSelect = "";
+    }
+
+    private void CargarCantidad()
+    {
+        try
+        {
+            //Entrada = EntradaController.Buscar(Convert.ToInt32());
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.ToString();
+        }
     }
 
     private void CargarCategoria()

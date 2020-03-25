@@ -1,2 +1,129 @@
-﻿<h3>REntradaInventario</h3>
+﻿@page "/Inventario"
+
+<h3>Registro inventario</h3>
+
+<EditForm Model="Entrada" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="IdInput">ArticuloId</label>
+        <InputNumber Id="IdInput" @bind-Value="Entrada.EntradaId" class="form-inline"></InputNumber>
+        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+    </div>
+
+    <div class="form-group">
+        <label for="FechaInput">Fecha</label>
+        <InputDate Id="FechaInput" @bind-Value="Entrada.Fecha" class="form-inline"></InputDate>
+    </div>
+
+    <label for="Producto">ProductoId</label>
+    <div class="input">
+        <InputSelect @bind-Value="@CategoriaSelect" class="form-inline " @onchange="CargarProductos" @onclick="CargarProductos">
+            <option value="" disabled selected>Seleccione un Producto</option>
+            @foreach (var item in ListaProductos)
+            {
+                <option value="@item.ProductoId">@item.Descripcion</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="CantidadInput">Cantidad</label>
+        <InputText Id="SemestreInput" @bind-Value="Entrada.Cantidad" class="form-inline"></InputText>
+    </div>
+
+    <div>
+        <button class="btn btn-outline-secondary" type="button" @onclick="Limpiar">Limpiar</button>
+        <button class="btn btn-outline-success" type="submit">Guardar</button>
+        <button class="btn btn-outline-danger" type="button" @onclick="Eliminar">Eliminar</button>
+    </div>
+
+    <h5>@mensaje</h5>
+
+</EditForm>
+
+@code {
+
+    public Entrada Entrada = new Entrada();
+    public string mensaje = "";
+    public string CategoriaSelect;
+
+    private List<Productos> ListaProductos = new List<Productos>();
+
+    private Productos Producto { get; set; }
+
+    EntradaController controller = new EntradaController();
+
+    public void Guardar()
+    {
+        EntradaController controller = new EntradaController();
+
+        if (controller.Guardar(Entrada))
+        {
+            this.Entrada = new Entrada();
+            mensaje = "Entrada Guardada";
+        }
+        else
+        {
+            this.Entrada = new Entrada();
+            mensaje = "Error al guardar";
+        }
+    }
+
+    private void Limpiar()
+    {
+        Entrada = new Entrada();
+    }
+
+    public void Buscar()
+    {
+        EntradaController controller = new EntradaController();
+
+        var entrada = controller.Buscar(Entrada.EntradaId);
+
+        if (entrada != null)
+        {
+            Entrada = entrada;
+        }
+        else
+        {
+            this.Entrada = new Entrada();
+            mensaje = "Entrada no encontrada";
+        }
+    }
+
+    public void Eliminar()
+    {
+        EntradaController controller = new EntradaController();
+
+        var entrada = controller.Buscar(Entrada.EntradaId);
+
+        if (Entrada != null)
+        {
+            if (controller.Eliminar(Entrada.EntradaId))
+            {
+                this.Entrada = new Entrada();
+                mensaje = "Entrada Eliminada";
+            }
+            else
+            {
+                this.Entrada = new Entrada();
+                mensaje = "Error al Eliminar";
+            }
+        }
+    }
+
+    private void CargarProductos()
+    {
+        try
+        {
+            //Producto = ProductoController.Buscar(Convert.ToInt32(CategoriaSelect));
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.ToString();
+        }
+    }
+}
+
 

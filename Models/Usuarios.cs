@@ -18,6 +18,7 @@ namespace FerreteriaSystem.Models
         public string NivelUsuario { get; set; }
         [Required(ErrorMessage = "El campo Usuario es obligatorio.")]
         public string Usuario { get; set; }
+        [Required(ErrorMessage = "La Clave no puede estar vacia")]
         public string Clave { get; set; }
         public DateTime FechaIngreso { get; set; }
 
