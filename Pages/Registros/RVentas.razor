@@ -125,11 +125,11 @@
                     <div class="form-group row">
                         <label>SubTotal</label>
                         <div class="col-2 ">
-                            <InputNumber @bind-Value="@Ventas.Total" class="form-control" disabled></InputNumber>
+                            <InputNumber @bind-Value="@Ventas.SubTotal" class="form-control" disabled></InputNumber>
                         </div>
                         <label>ITBIS</label>
                         <div class="col-2 ">
-                            <InputNumber @bind-Value="@Ventas.Total" class="form-control" disabled></InputNumber>
+                            <InputNumber @bind-Value="@Ventas.ITBIS" class="form-control" disabled></InputNumber>
                         </div>
                         <label>Total</label>
                         <div class="col-2 ">
@@ -195,6 +195,11 @@
     private int Cantidad = 0;
     private int Precio = 0;
     private int Importe = 0;
+
+    private decimal SubTotal = 0;
+    private double ITBIS = 0.18;
+    private decimal Total = 0;
+
 
     private List<Productos> ListaProducto = new List<Productos>();
     private List<Clientes> ListaCliente = new List<Clientes>();

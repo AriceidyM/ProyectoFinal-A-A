@@ -95,9 +95,9 @@ namespace FerreteriaSystem.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateTime>(nullable: false),
                     ClienteId = table.Column<int>(nullable: false),
-                    SubTotal = table.Column<int>(nullable: false),
-                    ITBIS = table.Column<int>(nullable: false),
-                    Total = table.Column<int>(nullable: false)
+                    SubTotal = table.Column<decimal>(nullable: false),
+                    ITBIS = table.Column<float>(nullable: false),
+                    Total = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {

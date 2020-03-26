@@ -157,14 +157,14 @@ namespace FerreteriaSystem.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ITBIS")
-                        .HasColumnType("INTEGER");
+                    b.Property<float>("ITBIS")
+                        .HasColumnType("REAL");
 
-                    b.Property<int>("SubTotal")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("VentaId");
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +9,14 @@ namespace FerreteriaSystem.Models
 {
     public class VentasDetalles
     {
+        [Key]
         public int Id { get; set; }
         public int VentaId { get; set; }
         public int ClienteId { get; set; }
         public int ProductoId { get; set; }
         public string Descripcion { get; set; }
         public int Precio { get; set; }
+        [Required(ErrorMessage = " el campo cantidad no puede estar vacio")]
         public int Cantidad { get; set; }
         public int Importe { get; set; }
 

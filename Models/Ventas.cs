@@ -13,9 +13,10 @@ namespace FerreteriaSystem.Models
         public DateTime Fecha { get; set; }
         [Required(ErrorMessage = "El cliente no puede estar vacio")]
         public int ClienteId { get; set; }
-        public int SubTotal { get; set; }
-        public int ITBIS { get; set; }
-        public int Total { get; set; }
+        public decimal SubTotal { get; set; }
+        public float ITBIS { get; set; }
+        [Required(ErrorMessage = "El total no puede estar vacio")]
+        public decimal Total { get; set; }
         public virtual ICollection<VentasDetalles> Detalle { get; set; }
 
         public Ventas()
