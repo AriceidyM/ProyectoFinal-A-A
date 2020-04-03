@@ -6,11 +6,16 @@
     <DataAnnotationsValidator />
 
     <div class="form-group">
-        <label for="IdInput">ArticuloId</label>
-        <InputNumber Id="IdInput" @bind-Value="Entrada.EntradaId" class="form-inline"></InputNumber>
-        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
-    </div>
+        <label for="IdInput">InventarioId</label>
+        <div class="input-group ">
 
+            <InputNumber Id="IdInput" @bind-Value="Entrada.EntradaId" class="form-inline"></InputNumber>
+            <div class="input-group-append">
+
+                <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <label for="FechaInput">Fecha</label>
         <InputDate Id="FechaInput" @bind-Value="Entrada.Fecha" class="form-inline"></InputDate>
@@ -18,7 +23,7 @@
 
     <label for="Producto">ProductoId</label>
     <div class="input">
-        <InputSelect @bind-Value="@CategoriaSelect" class="form-inline " @onchange="CargarProductos" @onclick="CargarProductos">
+        <InputSelect @bind-Value="@ProductoSelect" class="form-inline " @onchange="CargarProductos" @onclick="CargarProductos">
             <option value="" disabled selected>Seleccione un Producto</option>
             @foreach (var item in ListaProductos)
             {
@@ -29,7 +34,7 @@
 
     <div class="form-group">
         <label for="CantidadInput">Cantidad</label>
-        <InputText Id="SemestreInput" @bind-Value="Entrada.Cantidad" class="form-inline"></InputText>
+        <InputNumber Id="SemestreInput" @bind-Value="Entrada.Cantidad" class="form-inline"></InputNumber>
     </div>
 
     <div>
@@ -44,11 +49,18 @@
 
 @code {
 
-    public Entrada Entrada = new Entrada();
+    protected override void OnInitialized()
+    {
+        ListaProductos = productoController.GetList(p => true);
+        Producto = new Productos();
+    }
+    public Entradas Entrada = new Entradas();
     public string mensaje = "";
-    public string CategoriaSelect;
+    public string ProductoSelect;
 
     private List<Productos> ListaProductos = new List<Productos>();
+
+    ProductoController productoController = new ProductoController();
 
     private Productos Producto { get; set; }
 
@@ -60,19 +72,19 @@
 
         if (controller.Guardar(Entrada))
         {
-            this.Entrada = new Entrada();
+            this.Entrada = new Entradas();
             mensaje = "Entrada Guardada";
         }
         else
         {
-            this.Entrada = new Entrada();
+            this.Entrada = new Entradas();
             mensaje = "Error al guardar";
         }
     }
 
     private void Limpiar()
     {
-        Entrada = new Entrada();
+        Entrada = new Entradas();
     }
 
     public void Buscar()
@@ -87,7 +99,7 @@
         }
         else
         {
-            this.Entrada = new Entrada();
+            this.Entrada = new Entradas();
             mensaje = "Entrada no encontrada";
         }
     }
@@ -102,12 +114,12 @@
         {
             if (controller.Eliminar(Entrada.EntradaId))
             {
-                this.Entrada = new Entrada();
+                this.Entrada = new Entradas();
                 mensaje = "Entrada Eliminada";
             }
             else
             {
-                this.Entrada = new Entrada();
+                this.Entrada = new Entradas();
                 mensaje = "Error al Eliminar";
             }
         }
@@ -115,9 +127,12 @@
 
     private void CargarProductos()
     {
+        ProductoController productoController = new ProductoController();
         try
         {
-            //Producto = ProductoController.Buscar(Convert.ToInt32(CategoriaSelect));
+            Entrada.ProductoId = Convert.ToInt32(ProductoSelect);
+            Producto = productoController.Buscar(Convert.ToInt32(ProductoSelect));
+
         }
         catch (Exception ex)
         {

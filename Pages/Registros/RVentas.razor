@@ -19,6 +19,7 @@
                             <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
                         </div>
                     </div>
+
                     <!--Fecha-->
                     <label for="fecha">Fecha</label>
                     <div align="right" class="input-group col-md-6">
@@ -36,16 +37,6 @@
                         @foreach (var item in ListaCliente)
                         {
                             <option value="@item.ClienteId">@item.Nombres</option>
-                        }
-                    </InputSelect>
-                </div>
-                <div class="form-group">
-                    <label class="col-auto" for="cliente">Categoria</label>
-                    <InputSelect @bind-Value="@CategoriaSelect" class="form-control " @onchange="CargarCategoria" @onclick="CargarCategoria">
-                        <option value="" disabled selected>Seleccione una categoria</option>
-                        @foreach (var item in ListaCategoria)
-                        {
-                            <option value="@item.CategoriaId">@item.Nombre</option>
                         }
                     </InputSelect>
                 </div>
@@ -75,17 +66,17 @@
                     <!--Cantidad-->
                     <div class="col-2">
                         <label class="col-auto" for="Cantidad">Cantidad:</label>
-                        <InputNumber @bind-Value="@Cantidad" class="form-control"></InputNumber>
+                        <InputNumber @bind-Value="@Cantidad" class="form-control"@onfocusin="CalcularImporte" @onfocusout="CalcularImporte" @onclick="CalcularImporte"/>
                     </div>
                     <!--Precio-->
                     <div class="col-2">
                         <label class="col-auto" for="precio">Precio:</label>
-                        <InputNumber @bind-Value="@Precio" class="form-control" disabled></InputNumber>
+                        <InputNumber @bind-Value="@Precio" class="form-control" disabled />
                     </div>
                     <!--Importe-->
                     <div class="col-2">
                         <label class="col-auto" for="importe">Importe:</label>
-                        <InputNumber @bind-Value="@Importe" class="form-control "></InputNumber>
+                        <InputNumber @bind-Value="@Importe" class="form-control " @onfocusin="CalcularImporte" @onfocusout="CalcularImporte" @onclick="CalcularImporte"/>
                     </div>
                     <div class="form-group">
                         <br />
@@ -193,11 +184,10 @@
     private string mensaje = "";
 
     private int Cantidad = 0;
-    private int Precio = 0;
+    private decimal Precio = 0;
     private int Importe = 0;
 
     private decimal SubTotal = 0;
-    private double ITBIS = 0.18;
     private decimal Total = 0;
 
 
@@ -217,12 +207,16 @@
         Cliente = new Clientes();
         Producto = new Productos();
         Categorias = new CategoriaProductos();
-
         if (VentaId != 0)
         {
             Ventas.VentaId = VentaId;
             Buscar();
         }
+    }
+
+    private void CalcularImporte()
+    {
+        Importe = Convert.ToInt32(Precio) * Cantidad;
     }
 
     //private void Calcular()
@@ -243,6 +237,7 @@
         try
         {
             Producto = productosController.Buscar(Convert.ToInt32(ProductoSelect));
+            Precio = Producto.Precio;
         }
         catch (Exception ex)
         {
@@ -302,18 +297,25 @@
                         ProductoId = Producto.ProductoId,
                         Descripcion = Producto.Descripcion,
                         Cantidad = Cantidad,
-                        Precio = Precio,
-                        Importe = (Cantidad * Precio)
+                        Precio = Convert.ToInt32( Precio),
+                        Importe = (Cantidad *Convert.ToInt32( Precio))
                     });
+
+
+
                     Producto = new Productos();
 
-                    int total = 0;
+                    decimal Subtotal = 0;
 
                     foreach (var item in Ventas.Detalle)
                     {
+                        Subtotal += item.Importe;
                     }
 
-                    Ventas.Total = total;
+                    Ventas.SubTotal = Subtotal;
+                    Ventas.ITBIS = Cantidad * (Ventas.ITBIS*100/100);
+                    Ventas.Total = Subtotal + Ventas.ITBIS;
+
                 }
             }
         }

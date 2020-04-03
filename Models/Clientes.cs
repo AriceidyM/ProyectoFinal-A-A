@@ -19,7 +19,6 @@ namespace FerreteriaSystem.Models
         [Required(ErrorMessage = "La dirección del cliente no puede estar vacía!")]
         public string Direccion { get; set; }
         [DataType(DataType.PhoneNumber)]
-        [Required(ErrorMessage = "El teléfono del cliente no puede estar vacía!")]
         public string Telefono { get; set; }
         [DataType(DataType.PhoneNumber)]
         [Required(ErrorMessage = "El Celular del cliente no puede estar vacío!")]

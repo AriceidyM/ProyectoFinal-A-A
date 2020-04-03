@@ -7,9 +7,15 @@
     <DataAnnotationsValidator />
                 
     <div class="form-group">
-        <label for="IdInput">ClienteId</label>
-        <InputNumber Id="IdInput" @bind-Value="Producto.ProductoId" class="form-inline"></InputNumber>
-        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+        <label for="IdInput">ProductoId</label>
+        <div class="input-group ">
+
+            <InputNumber Id="IdInput" @bind-Value="Producto.ProductoId" class="form-inline"></InputNumber>
+            <div class="input-group-append">
+
+                <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+            </div>
+        </div>
     </div>
                
                 <div class="form-group">
@@ -67,7 +73,7 @@
         Producto = new Productos();
         ListaCategoria = categoriaController.GetList(e => true);
         Categoria = new CategoriaProductos();
-        Entrada = new Entrada();
+        Entrada = new Entradas();
 
         if (ProductoId != 0)
         {
@@ -84,7 +90,7 @@
 
     private CategoriaProductos Categoria { get; set; }
 
-    private Entrada Entrada { get; set; }
+    private Entradas Entrada { get; set; }
 
     CategoriaProductoController categoriaController = new CategoriaProductoController();
 

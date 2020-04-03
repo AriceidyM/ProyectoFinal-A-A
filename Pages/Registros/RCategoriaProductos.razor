@@ -8,8 +8,14 @@
 
     <div class="form-group">
         <label for="IdInput">CategoriaId</label>
-        <InputNumber Id="IdInput" @bind-Value="Categoria.CategoriaId" class="form-inline"></InputNumber>
-        <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+        <div class="input-group ">
+
+            <InputNumber Id="IdInput" @bind-Value="Categoria.CategoriaId" class="form-inline"></InputNumber>
+            <div class="input-group-append">
+
+                <button type="button" class="btn btn-outline-info" @onclick="Buscar">Buscar</button>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">

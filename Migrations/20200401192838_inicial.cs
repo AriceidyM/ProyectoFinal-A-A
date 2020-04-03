@@ -12,7 +12,7 @@ namespace FerreteriaSystem.Migrations
                 columns: table => new
                 {
                     CategoriaId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -25,12 +25,12 @@ namespace FerreteriaSystem.Migrations
                 columns: table => new
                 {
                     ClienteId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(nullable: false),
                     Nombres = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     Direccion = table.Column<string>(nullable: false),
-                    Telefono = table.Column<string>(maxLength: 10, nullable: false),
+                    Telefono = table.Column<string>(nullable: true),
                     Celular = table.Column<string>(maxLength: 10, nullable: false)
                 },
                 constraints: table =>
@@ -39,18 +39,18 @@ namespace FerreteriaSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Entrada",
+                name: "Entradas",
                 columns: table => new
                 {
                     EntradaId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(nullable: false),
                     ProductoId = table.Column<int>(nullable: false),
-                    Cantidad = table.Column<string>(nullable: true)
+                    Cantidad = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Entrada", x => x.EntradaId);
+                    table.PrimaryKey("PK_Entradas", x => x.EntradaId);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,7 +58,7 @@ namespace FerreteriaSystem.Migrations
                 columns: table => new
                 {
                     ProductoId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(nullable: false),
                     Existencia = table.Column<int>(nullable: false),
                     Precio = table.Column<decimal>(nullable: false),
@@ -74,7 +74,7 @@ namespace FerreteriaSystem.Migrations
                 columns: table => new
                 {
                     UsuarioId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Nombres = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     NivelUsuario = table.Column<string>(nullable: false),
@@ -92,7 +92,7 @@ namespace FerreteriaSystem.Migrations
                 columns: table => new
                 {
                     VentaId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(nullable: false),
                     ClienteId = table.Column<int>(nullable: false),
                     SubTotal = table.Column<decimal>(nullable: false),
@@ -109,7 +109,7 @@ namespace FerreteriaSystem.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     VentaId = table.Column<int>(nullable: false),
                     ClienteId = table.Column<int>(nullable: false),
                     ProductoId = table.Column<int>(nullable: false),
@@ -155,7 +155,7 @@ namespace FerreteriaSystem.Migrations
                 name: "Clientes");
 
             migrationBuilder.DropTable(
-                name: "Entrada");
+                name: "Entradas");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

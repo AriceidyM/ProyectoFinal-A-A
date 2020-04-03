@@ -48,6 +48,10 @@ namespace FerreteriaSystem.Controller
 
             try
             {
+                foreach (var item in ventas.Detalle)
+                {
+                    contexto.Productos.Find(item.ProductoId).Existencia -= item.Cantidad;
+                }
                 contexto.Ventas.Add(ventas);
                 paso = contexto.SaveChanges() > 0;
             }
